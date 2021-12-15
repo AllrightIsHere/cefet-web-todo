@@ -1,7 +1,7 @@
 const CATEGORIAS = Object.freeze({
-    LAZER: 'lazer',
-    COMPRAS: 'compras',
-    ESTUDOS: 'estudos'
+    lazer: 'lazer',
+    compras: 'compras',
+    estudos: 'estudos'
 });
 
 class Tarefa {
@@ -9,18 +9,55 @@ class Tarefa {
     #categoria;
     #realizada;
 
-    constructor(nome, categoria, realizada) {
+    constructor(nome, categoria, realizada = false) {
         this.#nome = nome;
         this.#categoria = categoria;
         this.#realizada = realizada;
     }
 
-    adicionaNaPagina(containerEl) {
-        const template = `
-        <li class="item-tarefa ${this.#realizada ? 'marcado' : ''} categoria-${this.#categoria}">${this.#nome}</li>
-        `;
+    get nome() {
+        return this.#nome;
+    }
 
-        containerEl.innerHTML += template;
+    get categoria() {
+        return this.#categoria;
+    }
+
+    get realizada() {
+        return this.#realizada;
+    }
+
+    set nome(nome) {
+        this.#nome = nome;
+    }
+
+    set categoria(categoria) {
+        this.#categoria = categoria;
+    }
+
+    set realizada(realizada) {
+        this.#realizada = realizada;
+    }
+
+    adicionaNaPagina(containerEl) {
+        const novoItem = document.createElement('li');
+        novoItem.innerHTML = this.#nome;
+        novoItem.classList.add("item-tarefa", `categoria-${this.#categoria}`);
+        if (this.#realizada) {
+            novoItem.classList.add('marcado');
+        }
+
+        novoItem.addEventListener('click', (e) => {
+            const el = e.currentTarget;
+            const nome = el.innerHTML;
+            const categoria = Array.from(el.classList).find(cls => cls.startsWith('categoria-')).slice(10);
+            const realizada = el.classList.toggle('marcado');
+            const index = tarefas.findIndex(tarefa => tarefa.nome === nome && tarefa.categoria === categoria && tarefa.realizada === !realizada);
+
+            tarefas[index].realizada = realizada;
+        });
+
+        containerEl.appendChild(novoItem);
     }
 
     static insereTarefasNaPagina(containerEl, tarefas) {
@@ -30,8 +67,8 @@ class Tarefa {
 }
 
 const tarefas = [
-    new Tarefa('Comprar leite', CATEGORIAS.COMPRAS, false),
-    new Tarefa('Escutar chimbinha', CATEGORIAS.LAZER, true)
+    new Tarefa('Comprar leite', CATEGORIAS.compras, false),
+    new Tarefa('Escutar chimbinha', CATEGORIAS.lazer, true)
 ];
 
 const listaTarefasEl = document.querySelector('#lista-tarefas');
@@ -48,7 +85,7 @@ const adicionaTarefa = (e) => {
         return;
     }
 
-    const novaTarefa = new Tarefa(inputNome.value, inputCategoria.value);
+    const novaTarefa = new Tarefa(inputNome.value, CATEGORIAS[inputCategoria.value]);
 
     tarefas.push(novaTarefa);
 
