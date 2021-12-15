@@ -39,12 +39,14 @@ Tarefa.insereTarefasNaPagina(listaTarefasEl, tarefas);
 
 // exercício 2
 const btnNovaTarefaEl = document.querySelector('#incluir-nova-tarefa');
+const inputNome = document.querySelector('#nova-tarefa-nome');
+const inputCategoria = document.querySelector('#nova-tarefa-categoria');
 
-btnNovaTarefaEl.addEventListener('click', (e) => {
-    const inputNome = document.querySelector('#nova-tarefa-nome');
-    const inputCategoria = document.querySelector('#nova-tarefa-categoria');
-
-    if (!inputNome.value) return;
+const adicionaTarefa = (e) => {
+    if (!inputNome.value) {
+        inputNome.focus();
+        return;
+    }
 
     const novaTarefa = new Tarefa(inputNome.value, inputCategoria.value);
 
@@ -54,7 +56,9 @@ btnNovaTarefaEl.addEventListener('click', (e) => {
 
     inputNome.value = '';
     inputNome.focus();
-});
+}
+
+btnNovaTarefaEl.addEventListener('click', adicionaTarefa);
 
 // exercício 3
 const filtroEl = document.querySelector('#filtro-de-categoria');
@@ -70,4 +74,11 @@ filtroEl.addEventListener('change', (e) => {
 
     const tarefasFiltradas = Array.from(tarefasNodeEl).filter(tarefaEl => !tarefaEl.classList.contains(`categoria-${filtro}`))
     tarefasFiltradas.forEach(tarefaEl => tarefaEl.classList.add('retido-no-filtro'));
+});
+
+// exercício 4
+inputNome.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+        adicionaTarefa(e);
+    }
 });
