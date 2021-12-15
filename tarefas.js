@@ -36,3 +36,22 @@ const tarefas = [
 
 const listaTarefasEl = document.querySelector('#lista-tarefas');
 Tarefa.insereTarefasNaPagina(listaTarefasEl, tarefas);
+
+// exercício 2
+const btnNovaTarefaEl = document.querySelector('#incluir-nova-tarefa');
+
+btnNovaTarefaEl.addEventListener('click', (e) => {
+    const inputNome = document.querySelector('#nova-tarefa-nome');
+    const inputCategoria = document.querySelector('#nova-tarefa-categoria');
+
+    if (!inputNome.value) return;
+
+    const novaTarefa = new Tarefa(inputNome.value, inputCategoria.value);
+
+    tarefas.push(novaTarefa);
+
+    novaTarefa.adicionaNaPagina(listaTarefasEl);
+
+    inputNome.value = '';
+    inputNome.focus();
+});
