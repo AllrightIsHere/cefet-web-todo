@@ -55,3 +55,19 @@ btnNovaTarefaEl.addEventListener('click', (e) => {
     inputNome.value = '';
     inputNome.focus();
 });
+
+// exercício 3
+const filtroEl = document.querySelector('#filtro-de-categoria');
+
+filtroEl.addEventListener('change', (e) => {
+    const filtro = e.currentTarget.value;
+
+    const tarefasNodeEl = document.querySelectorAll('#lista-tarefas > li');
+
+    tarefasNodeEl.forEach(tarefaEl => tarefaEl.classList.remove('retido-no-filtro'));
+
+    if (!filtro) return;
+
+    const tarefasFiltradas = Array.from(tarefasNodeEl).filter(tarefaEl => !tarefaEl.classList.contains(`categoria-${filtro}`))
+    tarefasFiltradas.forEach(tarefaEl => tarefaEl.classList.add('retido-no-filtro'));
+});
